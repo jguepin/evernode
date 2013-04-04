@@ -1,55 +1,56 @@
 var CustomConnections = require('./lib/evernode/CustomConnections');
-var UserStore 				= require('./lib/evernote-thrift/gen-nodejs/UserStore');
-var NoteStore 				= require('./lib/evernote-thrift/gen-nodejs/NoteStore');
-var NoteStoreTypes 		= require('./lib/evernote-thrift/gen-nodejs/NoteStore_types');
-var Types 						= require('./lib/evernote-thrift/gen-nodejs/Types_types');
+var UserStore = require('./lib/evernote-thrift/gen-nodejs/UserStore');
+var NoteStore = require('./lib/evernote-thrift/gen-nodejs/NoteStore');
+var NoteStoreTypes = require('./lib/evernote-thrift/gen-nodejs/NoteStore_types');
+var Types = require('./lib/evernote-thrift/gen-nodejs/Types_types');
 
-var oauth 						= require('oauth');
-var thrift						= require('thrift');
+var oauth = require('oauth');
+var thrift = require('thrift');
 
 exports.NoteStoreTypes = NoteStoreTypes;
-exports.Types 	 = Types;
+exports.Types = Types;
 exports.Evernote = Evernote;
 
 /**
  * Evernote
  * @param  {String} consumer_key - Evernote's API ConsumerKey
  * @param  {String} consumer_secret - Evernote's API ConsumerSecret
- * @param  {Bool} 	sandbox - using sandbox
+ * @param  {Bool}	sandbox - using sandbox
  * @constructor
  */
 function Evernote(consumer_key, consumer_secret, sandbox){
-		
+
 	if(!consumer_key || !consumer_secret) throw 'Argument Execption';
-	var server = sandbox? 'sandbox.evernote.com' : 'www.evernote.com'; 
-	
+	var server = sandbox? 'sandbox.evernote.com' : 'www.evernote.com';
+
 	this.createNoteStore = function (shardId) {
-	    var noteConnection = CustomConnections.createHTTPSConnection(server, 443, '/edam/note/' + shardId);
-	    return CustomConnections.createClient(NoteStore, noteConnection);
-	}
-	
+		var noteConnection = CustomConnections.createHTTPSConnection(server, 443, '/edam/note/' + shardId);
+		return CustomConnections.createClient(NoteStore, noteConnection);
+	};
+
 	this.createUserStore = function () {
-	    var userConnection = CustomConnections.createHTTPSConnection(server, 443, '/edam/user');
-			return CustomConnections.createClient(UserStore, userConnection);
-	}
-	
+		var userConnection = CustomConnections.createHTTPSConnection(server, 443, '/edam/user');
+		return CustomConnections.createClient(UserStore, userConnection);
+	};
+
 	this.oAuth = function(callback_url){
-	  return new oauth.OAuth(
-	    sandbox?"https://sandbox.evernote.com/oauth":"https://www.evernote.com/oauth", 
+		return new oauth.OAuth(
 			sandbox?"https://sandbox.evernote.com/oauth":"https://www.evernote.com/oauth",
-	    consumer_key, 
-			consumer_secret, 
-			"1.0", 
-			callback_url, 
-			"PLAINTEXT");   
-	}
-	
+			sandbox?"https://sandbox.evernote.com/oauth":"https://www.evernote.com/oauth",
+			consumer_key,
+			consumer_secret,
+			"1.0",
+			callback_url,
+			"PLAINTEXT"
+		);
+	};
+
 	this.oAuthRedirectUrl = function (oauthRequestToken) {
 		if(sandbox)
 			return "https://sandbox.evernote.com/OAuth.action?oauth_token="+oauthRequestToken;
 		else
 			return "https://www.evernote.com/OAuth.action?oauth_token="+oauthRequestToken;
-	}	
+	};
 }
 
 /**
@@ -60,11 +61,10 @@ function Evernote(consumer_key, consumer_secret, sandbox){
 Evernote.prototype.getUser = function (authToken, callback){
 
 	this.createUserStore().getUser(authToken, function(err, response) {
-		
 		if(response) response.authToken = authToken;
 		callback(err, response);
 	});
-}
+};
 
 /**
  * findNotes
@@ -84,25 +84,25 @@ Evernote.prototype.findNotes = function(user, words, option, callback)
 		callback = option;
 		option = {};
 	}
-	
+
 	if(!user || !user.shardId || !user.authToken) throw 'Argument Execption';
-	callback = callback || function (){}
-	
+	callback = callback || function (){};
+
 	var noteStore = this.createNoteStore(user.shardId);
 	var noteFilter = new NoteStoreTypes.NoteFilter();
-	
+
 	noteFilter.words = words || '';
 	noteFilter.order = Types.NoteSortOrder[(option.sortOrder || 'UPDATED')];
 	noteFilter.ascending = option.ascending || false;
 	noteFilter.inactive = option.inactive || false;
-	
+
 	var offset = option.offset || 0;
 	var count = option.count || 50;
-	
+
 	noteStore.findNotes(user.authToken, noteFilter, offset, count, function(err, response) {
-    callback(err, response)
+		callback(err, response);
   });
-}
+};
 
 /**
  * getNote
