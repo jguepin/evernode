@@ -76,6 +76,8 @@ Evernote.prototype.getUser = function (authToken, callback){
 		- sortOrder
 		- ascending
 		- inactive
+		- notebookGuid
+		- tagGuids { Array }
  * @param  { function (err, EDAMNoteList ) } callback
  */
 Evernote.prototype.findNotes = function(user, words, option, callback)
@@ -95,6 +97,8 @@ Evernote.prototype.findNotes = function(user, words, option, callback)
 	noteFilter.order = Types.NoteSortOrder[(option.sortOrder || 'UPDATED')];
 	noteFilter.ascending = option.ascending || false;
 	noteFilter.inactive = option.inactive || false;
+	noteFilter.tagGuids = option.tagGuids || [];
+	noteFilter.notebookGuid = option.notebookGuid || '';
 
 	var offset = option.offset || 0;
 	var count = option.count || 50;
