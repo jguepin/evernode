@@ -20,7 +20,7 @@ exports.Evernote = Evernote;
  */
 function Evernote(consumer_key, consumer_secret, sandbox){
 
-	if(!consumer_key || !consumer_secret) throw 'Argument Execption';
+	if(!consumer_key || !consumer_secret) throw 'Argument Exception';
 	var server = sandbox? 'sandbox.evernote.com' : 'www.evernote.com';
 
 	this.createNoteStore = function (shardId) {
@@ -85,7 +85,7 @@ Evernote.prototype.findNotes = function(user, words, option, callback)
 		option = {};
 	}
 
-	if(!user || !user.shardId || !user.authToken) throw 'Argument Execption';
+	if(!user || !user.shardId || !user.authToken) throw 'Argument Exception';
 	callback = callback || function (){};
 
 	var noteStore = this.createNoteStore(user.shardId);
@@ -121,23 +121,23 @@ Evernote.prototype.getNote = function(userInfo, guid, option, callback)
 		callback = option;
 		option = {};
 	}
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(!guid) throw 'ArgumentExecption';
 
-	if(typeof callback != 'function') throw 'ArgumentExecption';
-	
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(!guid) throw 'ArgumentException';
+
+	if(typeof callback != 'function') throw 'ArgumentException';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 	var withContent = option.withContent || true;
 	var withResourcesData = option.withResourcesData || false;
 	var withResourcesRecognition = option.withResourcesRecognition || false;
 	var withResourcesAlternateData = option.withResourcesAlternateData || false;
-	
-	noteStore.getNote(userInfo.authToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData, 
+
+	noteStore.getNote(userInfo.authToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData,
 		function(err, response) {
-    	callback(err, response);
-  	});
-}
+			callback(err, response);
+    });
+};
 
 /**
  * createNote
@@ -146,25 +146,25 @@ Evernote.prototype.getNote = function(userInfo, guid, option, callback)
  * @param  { function (err, EDAMUser) } callback
  */
 Evernote.prototype.createNote = function(userInfo, note, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof note 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof note 		 != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	if(note.attributes){
-		
-		if(typeof note.attributes != 'object') throw 'Argument Execption';
+
+		if(typeof note.attributes != 'object') throw 'Argument Exception';
 		note.attributes = new Types.NoteAttributes(note.attributes);
 	}
-	
+
 	note = new Types.Note(note);
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.createNote(userInfo.authToken, note, function(err, response) {
-    callback(err, response)
+		callback(err, response);
   });
-}
+};
 
 /**
  * updateNote
@@ -173,26 +173,26 @@ Evernote.prototype.createNote = function(userInfo, note, callback){
  * @param  { function (err, EDAMUser) } callback
  */
 Evernote.prototype.updateNote = function(userInfo, note, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof note 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof note != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	if(note.attributes){
-		
-		if(typeof note.attributes != 'object') throw 'Argument Execption';
+
+		if(typeof note.attributes != 'object') throw 'Argument Exception';
 		note.attributes = new Types.NoteAttributes(note.attributes);
 	}
-	
+
 	note = new Types.Note(note);
-	
-	
+
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.updateNote(userInfo.authToken, note, function(err, response) {
-    callback(err, response)
+		callback(err, response);
   });
-}
+};
 
 /**
  * deleteNote
@@ -201,16 +201,16 @@ Evernote.prototype.updateNote = function(userInfo, note, callback){
  * @param  { function (err, updateSequence) } authToken
  */
 Evernote.prototype.deleteNote = function(userInfo, guid, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.deleteNote(userInfo.authToken, guid, function(err, response) {
-    callback(err, response)
+    callback(err, response);
   });
-}
+};
 
 /**
  * getNoteSearchText
@@ -227,12 +227,12 @@ Evernote.prototype.getNoteSearchText = function(userInfo, guid, option, callback
 		callback = option;
 		option = {};
 	}
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(!guid) throw 'ArgumentExecption';
 
-	if(typeof callback != 'function') throw 'ArgumentExecption';
-	
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(!guid) throw 'ArgumentException';
+
+	if(typeof callback != 'function') throw 'ArgumentException';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 	var noteOnly = option.noteOnly || false;
 	var tokenizeForIndexing = option.tokenizeForIndexing || false;
@@ -241,7 +241,7 @@ Evernote.prototype.getNoteSearchText = function(userInfo, guid, option, callback
 		function(err, response) {
     	callback(err, response);
   	});
-}
+};
 
 
 //=====================================================================================================
@@ -254,7 +254,7 @@ Evernote.prototype.getNoteSearchText = function(userInfo, guid, option, callback
  */
 Evernote.prototype.listTags = function(user, callback)
 {	
-	if(!user || !user.shardId || !user.authToken) throw 'Argument Execption';
+	if(!user || !user.shardId || !user.authToken) throw 'Argument Exception';
 	callback = callback || function (){}
 	
 	var noteStore = this.createNoteStore(user.shardId);
@@ -272,10 +272,10 @@ Evernote.prototype.listTags = function(user, callback)
  */
 Evernote.prototype.getTag = function(userInfo, guid, callback)
 {
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(!guid) throw 'ArgumentExecption';
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(!guid) throw 'ArgumentException';
 
-	if(typeof callback != 'function') throw 'ArgumentExecption';
+	if(typeof callback != 'function') throw 'ArgumentException';
 	
 	var noteStore = this.createNoteStore(userInfo.shardId);
 
@@ -292,9 +292,9 @@ Evernote.prototype.getTag = function(userInfo, guid, callback)
  */
 Evernote.prototype.createTag = function(userInfo, tag, callback){
 	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof tag 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof tag 		 != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
 	
 	tag = new Types.Tag(tag);
 	
@@ -313,9 +313,9 @@ Evernote.prototype.createTag = function(userInfo, tag, callback){
  */
 Evernote.prototype.updateTag = function(userInfo, tag, callback){
 	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof tag 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof tag 		 != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
 	
 	tag = new Types.Tag(tag);
 	
@@ -333,16 +333,16 @@ Evernote.prototype.updateTag = function(userInfo, tag, callback){
  * @param  { function (err, updateSequence) } authToken
  */
 Evernote.prototype.expungeTag = function(userInfo, guid, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.expungeTag(userInfo.authToken, guid, function(err, response) {
-    callback(err, response)
-  });
-}
+		callback(err, response);
+	});
+};
 
 //=====================================================================================================
 
@@ -353,16 +353,16 @@ Evernote.prototype.expungeTag = function(userInfo, guid, callback){
  * @param  { function (err, Array<EDAMNotebook> ) } callback
  */
 Evernote.prototype.listNotebooks = function(user, callback)
-{	
-	if(!user || !user.shardId || !user.authToken) throw 'Argument Execption';
-	callback = callback || function (){}
-	
+{
+	if(!user || !user.shardId || !user.authToken) throw 'Argument Exception';
+	callback = callback || function (){};
+
 	var noteStore = this.createNoteStore(user.shardId);
-	
+
 	noteStore.listNotebooks(user.authToken, function(err, response) {
-    callback(err, response)
-  });
-}
+		callback(err, response);
+	});
+};
 
 /**
  * getNotebook
@@ -372,17 +372,17 @@ Evernote.prototype.listNotebooks = function(user, callback)
  */
 Evernote.prototype.getNotebook = function(userInfo, guid, callback)
 {
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(!guid) throw 'ArgumentExecption';
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(!guid) throw 'ArgumentException';
 
-	if(typeof callback != 'function') throw 'ArgumentExecption';
-	
+	if(typeof callback != 'function') throw 'ArgumentException';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 
 	noteStore.getNotebook(userInfo.authToken, guid, function(err, response) {
     callback(err, response);
   });
-}
+};
 
 /**
  * createNotebook
@@ -391,19 +391,19 @@ Evernote.prototype.getNotebook = function(userInfo, guid, callback)
  * @param  { function (err, EDAMNotebook) } callback
  */
 Evernote.prototype.createNotebook = function(userInfo, notebook, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof notebook 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof notebook != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	notebook = new Types.Notebook(notebook);
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.createNotebook(userInfo.authToken, notebook, function(err, response) {
-    callback(err, response)
+    callback(err, response);
   });
-}
+};
 
 /**
  * updateNotebook
@@ -412,19 +412,19 @@ Evernote.prototype.createNotebook = function(userInfo, notebook, callback){
  * @param  { function (err, number) } callback
  */
 Evernote.prototype.updateNotebook = function(userInfo, notebook, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof tag 		 != 'object') throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof tag != 'object') throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	notebook = new Types.Notebook(notebook);
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.updateNotebook(userInfo.authToken, notebook, function(err, response) {
-    callback(err, response)
+    callback(err, response);
   });
-}
+};
 
 /**
  * expungeNotebook
@@ -433,16 +433,16 @@ Evernote.prototype.updateNotebook = function(userInfo, notebook, callback){
  * @param  { function (err, updateSequence) } authToken
  */
 Evernote.prototype.expungeNotebook = function(userInfo, guid, callback){
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Execption';
-	if(typeof callback != 'function') throw 'Argument Execption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
+	if(typeof callback != 'function') throw 'Argument Exception';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.expungeNotebook(userInfo.authToken, guid, function(err, response) {
-    callback(err, response)
-  });
-}
+		callback(err, response);
+	});
+};
 
 
 //=====================================================================================================
@@ -458,16 +458,16 @@ Evernote.prototype.expungeNotebook = function(userInfo, guid, callback){
  */
 Evernote.prototype.getSyncState = function(userInfo, callback)
 {
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(typeof callback != 'function') throw 'ArgumentExecption';
-	
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(typeof callback != 'function') throw 'ArgumentException';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 
 	noteStore.getSyncState(userInfo.authToken,
 		function(err, response) {
-    	callback(err, response);
-  });
-}
+			callback(err, response);
+		});
+};
 
 /**
  * getFilteredSyncChunk
@@ -483,20 +483,14 @@ Evernote.prototype.getSyncChunk = function(userInfo, afterUSN, maxEntries, fullS
 		callback = option;
 		option = {};
 	}
-	
-	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentExecption';
-	if(typeof callback != 'function') throw 'ArgumentExecption';
-	
+
+	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'ArgumentException';
+	if(typeof callback != 'function') throw 'ArgumentException';
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 
 	noteStore.getSyncChunk(userInfo.authToken, afterUSN, maxEntries, fullSyncOnly,
 		function(err, response) {
-    	callback(err, response);
-  	});
-}
-
-
-
-
-
-
+			callback(err, response);
+		});
+};
