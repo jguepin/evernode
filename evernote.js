@@ -5,7 +5,7 @@ var NoteStoreTypes = require('./lib/evernote-thrift/gen-nodejs/NoteStore_types')
 var Types = require('./lib/evernote-thrift/gen-nodejs/Types_types');
 
 var oauth = require('oauth');
-var thrift = require('thrift');
+var thrift = require('thrift-dev');
 
 exports.NoteStoreTypes = NoteStoreTypes;
 exports.Types = Types;
