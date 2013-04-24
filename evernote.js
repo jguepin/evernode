@@ -67,6 +67,18 @@ Evernote.prototype.getUser = function (authToken, callback){
 };
 
 /**
+ * getPublicUserInfo
+ * @param  { String } username
+ * @param  { function (err, PublicUserInfo) } callback
+ */
+Evernote.prototype.getPublicUserInfo = function (username, callback){
+
+	this.createUserStore().getPublicUserInfo(username, function(err, response) {
+		callback(err, response);
+	});
+};
+
+/**
  * findNotes
  * @param  { EdamUser } user
  * @param  { String }		words
@@ -112,7 +124,7 @@ Evernote.prototype.findNotes = function(user, words, option, callback)
  * getNote
  * @param  { EdamUser } user
  * @param  { String }		guid
- * @param  { Option (optional) } option 
+ * @param  { Option (optional) } option
  * 		- withContent
  * 		- withResourcesData
  * 		- withResourcesRecognition
@@ -220,7 +232,7 @@ Evernote.prototype.deleteNote = function(userInfo, guid, callback){
  * getNoteSearchText
  * @param  { EdamUser } user
  * @param  { String }		guid
- * @param  { Option (optional) } option 
+ * @param  { Option (optional) } option
  * 		- noteOnly,
  * 		- tokenizeForIndexing
  * @param  { function (err, EDAMUser) } callback
@@ -257,12 +269,12 @@ Evernote.prototype.getNoteSearchText = function(userInfo, guid, option, callback
  * @param  { function (err, Array<EDAMTag> ) } callback
  */
 Evernote.prototype.listTags = function(user, callback)
-{	
+{
 	if(!user || !user.shardId || !user.authToken) throw 'Argument Exception';
 	callback = callback || function (){}
-	
+
 	var noteStore = this.createNoteStore(user.shardId);
-	
+
 	noteStore.listTags(user.authToken, function(err, response) {
     callback(err, response)
   });
@@ -280,7 +292,7 @@ Evernote.prototype.getTag = function(userInfo, guid, callback)
 	if(!guid) throw 'ArgumentException';
 
 	if(typeof callback != 'function') throw 'ArgumentException';
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
 
 	noteStore.getTag(userInfo.authToken, guid, function(err, response) {
@@ -295,15 +307,15 @@ Evernote.prototype.getTag = function(userInfo, guid, callback)
  * @param  { function (err, EDAMTag) } callback
  */
 Evernote.prototype.createTag = function(userInfo, tag, callback){
-	
+
 	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
 	if(typeof tag 		 != 'object') throw 'Argument Exception';
 	if(typeof callback != 'function') throw 'Argument Exception';
-	
+
 	tag = new Types.Tag(tag);
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.createTag(userInfo.authToken, tag, function(err, response) {
     callback(err, response)
   });
@@ -316,15 +328,15 @@ Evernote.prototype.createTag = function(userInfo, tag, callback){
  * @param  { function (err, number) } callback
  */
 Evernote.prototype.updateTag = function(userInfo, tag, callback){
-	
+
 	if(!userInfo || !userInfo.shardId || !userInfo.authToken) throw 'Argument Exception';
 	if(typeof tag 		 != 'object') throw 'Argument Exception';
 	if(typeof callback != 'function') throw 'Argument Exception';
-	
+
 	tag = new Types.Tag(tag);
-	
+
 	var noteStore = this.createNoteStore(userInfo.shardId);
-	
+
 	noteStore.updateTag(userInfo.authToken, tag, function(err, response) {
     callback(err, response)
   });
